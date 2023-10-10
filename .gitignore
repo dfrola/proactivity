@@ -1,0 +1,10 @@
+# ignore 
+*.log
+.idea/
+.classpath
+.factorypath
+.settings/
+.project
+
+# ignore ALL files in ANY directory named temp
+target/
