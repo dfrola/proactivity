@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property resource="application.yml" />
+    <property name="LOG_FILE" value="/erica-rmq" />
+    <appender name="RFA"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${base.logs.path}${LOG_FILE}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${base.logs.path}${LOG_FILE}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} - %msg%n - [%thread] %-5level %logger{36}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} - %msg%n - [%thread] %-5level %logger{36}</pattern>
+        </encoder>
+    </appender>
+
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="RFA" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <logger name="com.wan.areariscossioni" level="info" additivity="false">
+        <appender-ref ref="RFA" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+</configuration>
+
+
+
+

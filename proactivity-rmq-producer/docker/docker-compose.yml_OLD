@@ -1,0 +1,18 @@
+
+version: "3.0"
+services:
+  proactivity-rmq-producer:
+    build: .
+    restart: always
+    image: proactivity-rmq-producer:1.0
+    container_name: proactivity-rmq-producer
+    ports:
+      - 8082:8082
+    networks:
+      - rabbitntw
+    environment:
+      - spring.rabbitmq.host=172.25.0.1
+      - spring.rabbitmq.port=5673
+    
+networks:
+  rabbitntw:
