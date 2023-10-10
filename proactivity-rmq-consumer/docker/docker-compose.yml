@@ -1,0 +1,24 @@
+
+version: "3.0"
+services:
+  proactivity-rmq-consumer:
+    build: .
+    restart: always
+    image: proactivity-rmq-consumer:1.0
+    container_name: proactivity-rmq-consumer
+    ports:
+      - 8083:8083
+    networks:
+      - proactivity-rmq-consumer-net
+    environment:
+      - spring.rabbitmq.host=172.25.0.1
+      - spring.rabbitmq.port=5673
+      - spring.datasource.url=jdbc:mysql://172.27.0.1:3306/people?useSSL=false&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&enabledTLSProtocols=TLSv1,TLSv1.1,TLSv1.2
+      
+    volumes:
+      - /home/davide/proactivity-rmq-consumer/logs:/logs    
+    
+networks:
+  proactivity-rmq-consumer-net:
+    name: proactivity-rmq-consumer-net
+    driver: bridge
