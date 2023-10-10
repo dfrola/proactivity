@@ -1,5 +1,6 @@
 # ignore 
 *.log
+*.jar
 .idea/
 .classpath
 .factorypath
