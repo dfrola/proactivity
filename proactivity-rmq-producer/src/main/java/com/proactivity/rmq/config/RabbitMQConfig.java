@@ -31,8 +31,7 @@ public class RabbitMQConfig {
     @Value("${send.to.erica.exchange}")   
     String toEricaexchange;
 
-    @Value("${send.to.erica.routingkey}")
-    //@Value("#{'${send.to.erica.routingkey}'}")
+    @Value("${send.to.erica.routingkey}")    
     private String toEricaroutingkey;
 
     @Bean
