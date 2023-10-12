@@ -12,8 +12,7 @@ import com.proactivity.rmq.model.EmployeeDTO;
 @Service
 public class RabbitMQSender {
 	
-	static final Logger logger = LoggerFactory.getLogger(RabbitMQSender.class);
-	
+	static final Logger logger = LoggerFactory.getLogger(RabbitMQSender.class);	
 	private AmqpTemplate rabbitTemplate;
 	
 	@Autowired
