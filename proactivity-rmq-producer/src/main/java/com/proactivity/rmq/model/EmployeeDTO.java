@@ -8,6 +8,7 @@ public class EmployeeDTO {
 
     private String name;
     private String lastName;
+    
 	public String getName() {
 		return name;
 	}
