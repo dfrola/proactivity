@@ -1,0 +1,11 @@
+global com.proactivity.decision.manager.dto.DecisionResult decisionResult;
+import com.proactivity.decision.manager.dto.request.ISPRequest;
+rule "Check OS Android and app version > 1.0 by ISPRequest"
+ dialect "java"
+ when
+    ispRequestInstance : ISPRequest(context.os == "android" && context.appVersion > 1.0)
+ then
+    decisionResult.setResult('true');
+end
+
+

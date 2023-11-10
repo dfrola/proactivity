@@ -1,0 +1,10 @@
+global com.proactivity.decision.manager.dto.DecisionResult decisionResult;
+import com.proactivity.decision.manager.dto.DecisionData;
+dialect  "java"
+
+rule "Modify bonifico decimal"
+    when
+        decisionDataInstance : DecisionData(data == 'Pippo');
+    then
+        decisionResult.setResult('Davide');
+end

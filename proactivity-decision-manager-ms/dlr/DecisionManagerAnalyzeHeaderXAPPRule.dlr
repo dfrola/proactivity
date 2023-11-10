@@ -1,0 +1,10 @@
+global com.proactivity.decision.manager.dto.DecisionResult decisionResult;
+import com.proactivity.decision.manager.dto.DecisionData;
+dialect  "java"
+
+rule "Analize header XAPP "
+    when
+        decisionDataInstance : DecisionData(data > 1.0);
+    then
+        decisionResult.setResult('true');
+end

@@ -1,0 +1,11 @@
+global com.proactivity.decision.manager.dto.DecisionResult decisionResult;
+import java.util.HashMap;
+rule "Check OS Android and app version > 1.0 by Map"
+ dialect "java"
+ when
+    $map : HashMap(this["X-SO"] == "android" && this["X-APP-VERSION"] > 1.0)
+ then
+    decisionResult.setResult('true');
+end
+
+
