@@ -1,0 +1,50 @@
+# ===============================
+# = Hibernate datasource
+# ===============================
+spring:
+  datasource:
+    dm:
+     url: @db.dm.url@
+     username: @db.dm.username@
+     password: @db.dm.password@
+     driver-class-name: com.mysql.cj.jdbc.Driver
+     hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+   
+  # ===============================
+  # = JPA configurations
+  # ===============================
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+      logging.level: DEBUG
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+    database-platform: MYSQL
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+
+  main:
+    allow-bean-definition-overriding: true
+    jackson.serialization.FAIL_ON_EMPTY_BEANS: false
+    profiles.active: @activatedProperties@   
+
+# ===============================
+# = Logging configurations
+# ===============================
+logging:
+  level:
+    root: WARN
+    com.memorynotfound: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO   
+    com.proactivity.decision.manager: DEBUG
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: 
+    name: @base.logs.path@
+
+
+    
