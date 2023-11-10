@@ -1,0 +1,18 @@
+
+version: "3.0"
+services:
+  proactivity-rmq-consumer:
+    build: .
+    restart: always
+    image: proactivity-rmq-consumer:1.0
+    container_name: proactivity-rmq-consumer
+    ports:
+      - 8083:8083
+    networks:
+      - rabbitntw
+    environment:
+      - spring.rabbitmq.host=172.25.0.1
+      - spring.rabbitmq.port=5673
+    
+networks:
+  rabbitntw:

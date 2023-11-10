@@ -1,0 +1,19 @@
+
+version: "3.0"
+services:
+
+  mysqldb:
+    image: "mysql:8.0.34"
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - mysql-server-net
+    environment:
+      MYSQL_DATABASE: people
+      MYSQL_ROOT_PASSWORD: root
+
+networks:
+  mysql-server-net:
+    name: mysql-server-net
+    driver: bridge    
