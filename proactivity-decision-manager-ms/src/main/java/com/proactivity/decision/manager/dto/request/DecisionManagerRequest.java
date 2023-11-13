@@ -7,16 +7,18 @@ public class DecisionManagerRequest {
 	private String context;
 	private Map<String, Object> conditionMap;	
 	private Object body;
+	private String json;
 	
 	public DecisionManagerRequest() {
 		super();		
 	}
 		
-	public DecisionManagerRequest(String context, Map<String, Object> conditionMap, Object body) {
+	public DecisionManagerRequest(String context, Map<String, Object> conditionMap, Object body, String json) {
 		super();
 		this.context = context;
 		this.conditionMap = conditionMap;
 		this.body = body;
+		this.json = json;
 	}
 
 	public Map<String, Object> getConditionMap() {
@@ -40,8 +42,17 @@ public class DecisionManagerRequest {
 		this.context = context;
 	}
 
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
+	}
+
 	@Override
 	public String toString() {
-		return "DecisionManagerRequest [context=" + context + ", conditionMap=" + conditionMap + ", body=" + body + "]";
+		return "DecisionManagerRequest [context=" + context + ", conditionMap=" + conditionMap + ", body=" + body
+				+ ", json=" + json + "]";
 	}		
 }

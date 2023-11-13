@@ -213,7 +213,85 @@ public class DecisionManager {
 		}
 	}
 	
-	public Object route(Object obj, String rule)	throws DecisionManagerException {
+	public Object modify(String jsonString, String jsonPath, String jsonType, String searchKey, String rule) throws DecisionManagerException {
+		
+		try {		
+
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+			ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();		
+
+//			Gson gson = new Gson();
+//			String jsonString = gson.toJson(obj);
+
+			logger.debug("@@@@ - INPUT OBJ to json -> " + jsonString + " - @@@>");
+
+			JSONObject jsonObj = (JSONObject) new JSONParser(JSONParser.DEFAULT_PERMISSIVE_MODE).parse(jsonString);
+
+			if (SEARCH_TYPE_OBJECT.equals(jsonType)) {
+				
+				try {
+					JSONObject jsonObjValue = JsonPath.read(jsonObj, jsonPath);
+					DecisionData fact = new DecisionData(jsonObjValue.get(searchKey));
+					Object result = retrieveResult(new DecisionResult(), fact, Arrays.asList(rule));
+	
+					if (result != null) {
+						jsonObjValue.replace(searchKey, result);
+					}
+				}catch(PathNotFoundException pnfe) {
+					logger.warn("### - JSON PATH NON VALIDO -> " + jsonPath + " - ###>");
+					throw new DecisionManagerPathNotFoudException(pnfe);
+				};
+
+			} else if (SEARCH_TYPE_ARRAY.equals(jsonType)) {
+				
+				try {
+
+					JSONArray jsonArray = JsonPath.read(jsonObj, jsonPath);
+	
+					Object toRemove = null;
+					Object toAdd = null;
+					
+					for (Object arrEl : jsonArray) {
+						DecisionData fact = null;
+						if (arrEl instanceof JSONObject) {
+							Object data = ((JSONObject) arrEl).get(searchKey);
+							if (data != null) {
+								fact = new DecisionData(data);
+								Object result = retrieveResult(new DecisionResult(), fact, Arrays.asList(rule));
+								if (result != null) {
+									((JSONObject) arrEl).replace(searchKey, result);
+								}
+							}
+						} else {
+							fact = new DecisionData(arrEl);
+							Object result = retrieveResult(new DecisionResult(), fact, Arrays.asList(rule));
+							if (result != null) {
+								toRemove = arrEl;
+								toAdd = result;
+							}
+						}
+					}
+					if (toRemove != null && toAdd != null) {
+						jsonArray.remove(toRemove);
+						jsonArray.add(toAdd);
+						jsonObj.put(searchKey, jsonArray);
+					}
+				}catch(PathNotFoundException pnfe) {
+					logger.warn("### - JSON PATH NON VALIDO -> " + jsonPath + " - ###>");
+					throw new DecisionManagerPathNotFoudException(pnfe);
+				};
+			}
+			logger.debug("@@@@ - OUTPUT JSON -> " + jsonObj.toJSONString() + " - @@@>");
+			//return gson.fromJson(jsonObj.toJSONString(), obj.getClass());
+			return mapper.readValue(jsonObj.toJSONString(), jsonString.getClass());
+
+		} catch (Exception ex) {
+			throw new DecisionManagerException("<!!!!!!>", ex);
+		}
+	}
+	
+	public Object route(Object obj, String rule) throws DecisionManagerException {
 		
 		try {
 			

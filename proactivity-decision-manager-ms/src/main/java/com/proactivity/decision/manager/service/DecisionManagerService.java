@@ -193,11 +193,13 @@ public class DecisionManagerService {
 
 		List<DecisionCase> decisionCases = null;
 
-		if (context != null) {
-			decisionCases = decisionCaseRepository.find(obj.getClass().getName(), "ROUTE", context);
-		} else {
-			decisionCases = decisionCaseRepository.find(obj.getClass().getName(), "ROUTE");
-		}
+//		if (context != null) {
+//			decisionCases = decisionCaseRepository.find(obj.getClass().getName(), "ROUTE", context);
+//		} else {
+//			decisionCases = decisionCaseRepository.find(obj.getClass().getName(), "ROUTE");
+//		}
+		
+		decisionCases = decisionCaseRepository.findByContextAndCategory(context, "ROUTE");
 
 		DecisionManager decisionManager = new DecisionManager();
 

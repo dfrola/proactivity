@@ -25,7 +25,13 @@ public class DecisionManagerController {
 	}       
     
     @PostMapping(path = "/entities")
-    public ResponseEntity<?> modifyResource(@RequestBody DecisionManagerRequest request) {  
+    public ResponseEntity<?> modifyResource(@RequestBody DecisionManagerRequest request) {      	
+    	
+    	
+    	if(request.getJson() != null && ( ! request.getJson().isEmpty())) {
+    		return ResponseEntity.status(HttpStatus.OK)
+        	        .body(decisionManagerService.modify(request.getConditionMap(), request.getJson(), request.getContext()));  
+    	}
         	
     	return ResponseEntity.status(HttpStatus.OK)
     	        .body(decisionManagerService.modify(request.getConditionMap(), request.getBody(), request.getContext()));  
