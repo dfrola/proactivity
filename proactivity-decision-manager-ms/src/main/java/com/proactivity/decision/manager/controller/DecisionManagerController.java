@@ -1,6 +1,8 @@
 package com.proactivity.decision.manager.controller;
 
 
+import java.util.Base64;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class DecisionManagerController {
     	
     	if(request.getJson() != null && ( ! request.getJson().isEmpty())) {
     		return ResponseEntity.status(HttpStatus.OK)
-        	        .body(decisionManagerService.modify(request.getConditionMap(), request.getJson(), request.getContext()));  
+        	        .body(decisionManagerService.modify(request.getConditionMap(), new String(Base64.getDecoder().decode(request.getJson())), request.getContext()));  
     	}
         	
     	return ResponseEntity.status(HttpStatus.OK)

@@ -1,14 +1,11 @@
 package com.proactivity.decision.manager;
 
 import java.io.File;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.json.simple.parser.ParseException;
+import org.jsfr.json.JsonSurfer;
+import org.jsfr.json.compiler.JsonPathCompiler;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
@@ -20,19 +17,14 @@ import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
-import com.jayway.jsonpath.internal.JsonFormatter;
-import com.proactivity.decision.manager.dto.CatalogEl;
 import com.proactivity.decision.manager.dto.DecisionData;
 import com.proactivity.decision.manager.dto.DecisionResult;
-import com.proactivity.decision.manager.dto.EmployeeDTO;
-import com.proactivity.decision.manager.dto.ISPData;
 import com.proactivity.decision.manager.exception.DecisionManagerException;
 import com.proactivity.decision.manager.exception.DecisionManagerPathNotFoudException;
 
@@ -46,6 +38,23 @@ public class DecisionManager {
 
 	public static String SEARCH_TYPE_OBJECT = "OBJECT";
 	public static String SEARCH_TYPE_ARRAY = "ARRAY";
+	
+	private JsonSurfer mainSurfer;
+	
+	
+	public DecisionData retrieve(String json, String jsonPath) {
+		
+		// private final ObjectMapper objectMapper; // se ho bisogno di accedere a Jackson
+		org.jsfr.json.path.JsonPath JSON_PATH = JsonPathCompiler.compile(jsonPath);
+	
+		DecisionData dData = new DecisionData();
+	
+		mainSurfer.configBuilder()
+					.bind(JSON_PATH, (value, context) -> dData.setData(value.toString()))	// value è un JsonNode
+					.buildAndSurf(json);
+					
+		return dData;
+	}
 	
 	public Boolean check(Object obj, String rule)	throws DecisionManagerException {	
 		
