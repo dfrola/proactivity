@@ -37,7 +37,7 @@ public class GroovyService {
 //	}
 	
 	
-	//Riferimenti assoluti a file system (Classi Groovy esterne all'applicazione)
+	//Riferimenti assoluti a file system (Classi Groovy esterne all'applicazione) il file ResponseManager.groovy si trova in src/main/groovy
 	public ISPData modify(ISPData ispData) {
 		return (ISPData) groovy.invokeClass("/home/davide/GROOVY/CLASS/ResponseManager.groovy", "modify", ispData );
 	}
