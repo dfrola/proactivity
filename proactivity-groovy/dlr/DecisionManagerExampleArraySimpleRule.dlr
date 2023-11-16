@@ -1,0 +1,10 @@
+global com.proactivity.decision.manager.dto.DecisionResult decisionResult;
+import com.proactivity.decision.manager.dto.DecisionData;
+dialect  "mvel"
+
+rule "Modify bonifico"
+    when
+        decisionDataInstance : DecisionData(data == 'xx');
+    then
+        decisionResult.setResult('yy');
+end

@@ -1,0 +1,9 @@
+global com.proactivity.decision.manager.dto.DecisionResult decisionResult;
+import com.proactivity.decision.manager.dto.request.ISPRequest;
+rule "Check X-BT in bean for route core-bonifico-v2"
+    dialect  "java"
+    when
+        ispRequestInstance : ISPRequest((num % 2) == 0)
+    then
+        decisionResult.setResult('core-bonifico-v2');
+end

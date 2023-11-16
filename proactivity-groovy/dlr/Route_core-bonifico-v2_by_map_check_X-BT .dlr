@@ -1,0 +1,9 @@
+global com.proactivity.decision.manager.dto.DecisionResult decisionResult;
+import java.util.HashMap;
+rule "Check X-BT for route core-bonifico-v2"
+    dialect  "java"
+    when
+        $map : HashMap((this["X-BT"] % 2) == 0)
+    then
+        decisionResult.setResult('core-bonifico-v2');
+end

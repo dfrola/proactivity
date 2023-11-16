@@ -1,0 +1,10 @@
+global com.proactivity.decision.manager.dto.DecisionResult decisionResult;
+import com.proactivity.decision.manager.dto.DecisionData;
+dialect  "java"
+
+rule "Modify bonifico-v1 to bonifico-v2"
+    when
+        decisionDataInstance : DecisionData(data == '/bonifico-v1/home');
+    then
+        decisionResult.setResult('/bonifico-v2/home');
+end
