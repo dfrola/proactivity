@@ -24,7 +24,20 @@ public class DecisionManagerController {
     public DecisionManagerController(DecisionManagerService decisionManagerService) {
 		super();
 		this.decisionManagerService = decisionManagerService;
-	}       
+	}  
+	
+	@PostMapping(path = "/cache/entities")
+    public ResponseEntity<?> modifyResourceByCache(@RequestBody DecisionManagerRequest request) {      	
+    	
+    	
+//    	if(request.getJson() != null && ( ! request.getJson().isEmpty())) {
+//    		return ResponseEntity.status(HttpStatus.OK)
+//        	        .body(decisionManagerService.modifyByCache(new String(Base64.getDecoder().decode(request.getJson())), request.getContext()));  
+//    	}
+        	
+    	return ResponseEntity.status(HttpStatus.OK)
+    	        .body(decisionManagerService.modifyByCache(request.getBody(), request.getContext()));  
+    }
     
     @PostMapping(path = "/entities")
     public ResponseEntity<?> modifyResource(@RequestBody DecisionManagerRequest request) {      	

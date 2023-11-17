@@ -1,6 +1,8 @@
 package com.proactivity.decision.manager.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.proactivity.decision.manager.DecisionManager;
+import com.proactivity.decision.manager.DecisionManagerStatefull;
 import com.proactivity.decision.manager.exception.DecisionManagerException;
 import com.proactivity.decision.manager.exception.DecisionManagerPathNotFoudException;
 import com.proactivity.decision.manager.persistence.entity.DecisionCase;
@@ -20,6 +23,8 @@ public class DecisionManagerService {
 	static final Logger logger = LoggerFactory.getLogger(DecisionManagerService.class);
 
 	private DecisionCaseRepository decisionCaseRepository;
+	
+	private Map<Long, DecisionManagerStatefull> cache = new HashMap();  
 
 	@Autowired
 	public DecisionManagerService(DecisionCaseRepository decisionCaseRepository) {
@@ -41,6 +46,46 @@ public class DecisionManagerService {
 			objToModify = modify(objToModify, context);
 		}
 		return objToModify;
+	}
+	
+	public Object modifyByCache(Object obj, String context) {
+
+		logger.info("Input OBJ class name: " + obj.getClass().getName());
+		logger.info("Input OBJ value: " + obj);
+		List<DecisionCase> decisionCases = null;
+
+//		if (context != null) {
+//			decisionCases = decisionCaseRepository.find(obj.getClass().getName(), "MODIFY", context);
+//		} else {
+//			decisionCases = decisionCaseRepository.find(obj.getClass().getName(), "MODIFY");
+//		}
+		
+		decisionCases = decisionCaseRepository.findByContextAndCategory(context, "MODIFY");
+		DecisionManagerStatefull decisionManager;
+
+		for (DecisionCase decisionCase : decisionCases) {
+
+			List<DecisionCaseRule> decisionCaseRules = decisionCase.getRules();
+
+			for (DecisionCaseRule dcr : decisionCaseRules) {
+				try {
+					if(cache.containsKey(dcr.getDecisionCaseRuleId())) {
+						decisionManager = cache.get(dcr.getDecisionCaseRuleId());
+					}else {
+						decisionManager = new DecisionManagerStatefull(decisionCase.getJsonPath(), decisionCase.getJsonType(),
+								dcr.getSearchKey(), dcr.getRuleFile());
+						cache.put(dcr.getDecisionCaseRuleId(), decisionManager);
+					}
+					obj = decisionManager.modify(obj);
+				} catch (DecisionManagerException dme) {					
+					if(dme.getCause() instanceof DecisionManagerPathNotFoudException) {						
+						continue;
+					}	
+					throw dme;
+				}				
+			}
+		}
+		return obj;
 	}
 
 	public Object modify(Object obj, String context) {
@@ -127,6 +172,8 @@ public class DecisionManagerService {
 		}
 		return result;
 	}
+	
+	
 		
 	public Boolean check(Object obj, String context) {
 
